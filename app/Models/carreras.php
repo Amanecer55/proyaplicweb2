@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class carreras extends Model
 {
     use HasFactory;
+    protected $table = 'carreras'; 
     protected $primaryKey = 'idca';
     protected $fillable = ['idca','nombre','activo'];
 }

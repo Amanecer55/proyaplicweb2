@@ -44,7 +44,7 @@
                 </tr>
                 <tr>
                     <td>Fecha nacimiento</td>
-                    <td><input type="date" name="fecha_nacimiento" value="{{ old('fecha_nacimiento') }}"></td>
+                    <td><input type="date" name="fechanac" value="{{ old('fecha_nacimiento') }}"></td>
                 </tr>
                 <tr>
                     <td>Email</td>

@@ -10,5 +10,5 @@ class empleados extends Model
     use HasFactory;
     protected $primaryKey = 'idemp';
     protected $fillable = ['idemp','nombre','apellido','edad','correo',
-                           'fechanac','rfc','idca','sexo','curriculum','activo'];
+                           'fechanac','rfc','idca','sexo','curriculom','activo'];
 }
