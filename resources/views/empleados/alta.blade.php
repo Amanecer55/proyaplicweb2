@@ -44,7 +44,7 @@
                 </tr>
                 <tr>
                     <td>Fecha nacimiento</td>
-                    <td><input type="date" name="fechanac" value="{{ old('fecha_nacimiento') }}"></td>
+                    <td><input type="date" name="fechanac" value="{{ old('fechanac') }}"></td>
                 </tr>
                 <tr>
                     <td>Email</td>
@@ -52,7 +52,7 @@
                         @if($errors->has('email'))
                             {{ $errors->first('email') }}
                         @endif
-                        <input type="email" name="email" value="{{ old('email') }}" >
+                        <input type="email" name="correo" value="{{ old('correo') }}" >
                     </td>
                 </tr>
                 <tr>
