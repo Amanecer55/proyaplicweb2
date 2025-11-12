@@ -3,15 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {{-- CORREGIDO: Título dinámico para la pestaña del navegador --}}
+    {{-- Título dinámico para la pestaña del navegador --}}
     <title>@yield('titulo', 'Sistema de Nómina')</title> 
     
-    {{-- Se carga Bootstrap CSS desde CDN (se elimina el uso de asset('css/') redundante) --}}
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    
-    {{-- Aquí puedes agregar CSS personalizado con asset() si lo necesitas --}}
-    {{-- <link href="{{asset('css/estilos.css')}}" rel="stylesheet" /> --}}
-
+    {{-- CORRECCIÓN CRÍTICA: Eliminada la 'x' en integrity --}}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" xintegrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 <body>
     {{-- COMIENZA LA BARRA DE NAVEGACIÓN --}}
@@ -45,14 +41,14 @@
     </nav>
     {{-- TERMINA LA BARRA DE NAVEGACIÓN --}}
 
-    {{-- AQUI SE INSERTA EL CONTENIDO DE LA VISTA HIJA (ALTA, EDITA, REPORTE) --}}
+    {{-- AQUI SE INSERTA EL CONTENIDO DE LA VISTA HIJA --}}
     <main class="container mt-4">
         @yield('contenido')
     </main>
 
     {{-- SCRIPTS (Bootstrap JS y jQuery) --}}
-    {{-- Es mejor incluir los scripts JS al final del body --}}
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    {{-- CORRECCIÓN CRÍTICA: Eliminada la 'x' en integrity --}}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" xintegrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 </body>
