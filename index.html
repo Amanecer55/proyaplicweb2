@@ -1,0 +1,310 @@
+
+¡Genial! Ya tienes XAMPP instalado y tu archivo PHP abierto en Visual Studio Code. Para conectar tu PHP con MySQL y guardar registros, sigue estos pasos clave. Usaremos la extensión MySQLi (MySQL Improved) que es la forma recomendada.
+
+1. Configuración Previa en XAMPP (MySQL/phpMyAdmin)
+Antes de escribir código, necesitas asegurarte de que tu base de datos esté lista:
+
+Inicia los Servicios: Abre el Panel de Control de XAMPP e inicia los módulos Apache y MySQL.
+
+Crea la Base de Datos y Tabla:
+
+Ve a http://localhost/phpmyadmin en tu navegador.
+
+Crea una nueva base de datos (por ejemplo, mi_base).
+
+Dentro de esa base de datos, crea una tabla (por ejemplo, usuarios) con los campos que necesites, como id (INT, AUTO_INCREMENT, PRIMARY KEY), nombre (VARCHAR), y email (VARCHAR).
+
+2. Archivo de Conexión a la Base de Datos (PHP)
+Crea un archivo llamado conexion.php (o similar) en la carpeta donde tienes tu proyecto (dentro de xampp/htdocs/tu_proyecto). Este archivo se encargará de establecer la conexión.
+
+Código Importante para la Conexión (conexion.php)
+PHP
+
+<?php
+// Credenciales para la conexión
+$servidor = "localhost"; // Generalmente es 'localhost' para XAMPP
+$usuario = "root";       // Usuario por defecto de MySQL en XAMPP
+$password = "";          // Contraseña por defecto de MySQL en XAMPP (suele estar vacía)
+$base_datos = "mi_base"; // Reemplaza con el nombre de tu base de datos
+
+// Crear la conexión usando MySQLi orientado a objetos
+$conexion = new mysqli($servidor, $usuario, $password, $base_datos);
+
+// Verificar la conexión
+if ($conexion->connect_error) {
+    // Si hay un error, muestra un mensaje y termina la ejecución
+    die("Error de conexión con la base de datos: " . $conexion->connect_error);
+}
+
+// Opcional: Establecer el juego de caracteres a utf8
+$conexion->set_charset("utf8");
+
+// Nota: Puedes incluir este archivo en otros scripts para usar la variable $conexion
+?>
+3. Archivo para Insertar Registros (PHP con Formulario)
+Este archivo (por ejemplo, insertar.php) contendrá un formulario HTML para ingresar datos y el código PHP para procesarlos y guardarlos.
+
+Código Importante para Insertar Registros (insertar.php)
+PHP
+
+<?php
+// 1. Incluir el archivo de conexión
+require 'conexion.php'; // Asegúrate de que el nombre del archivo sea correcto
+
+// 2. Verificar si el formulario ha sido enviado (cuando se presiona el botón)
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    
+    // 3. Obtener y limpiar los datos del formulario (¡IMPORTANTE para la seguridad!)
+    // Usamos $conexion->real_escape_string() para prevenir inyecciones SQL
+    $nombre = $conexion->real_escape_string($_POST['nombre']);
+    $email = $conexion->real_escape_string($_POST['email']);
+    
+    // 4. Construir la consulta SQL para la inserción
+    // Reemplaza 'usuarios' y los nombres de las columnas si son diferentes
+    $sql = "INSERT INTO usuarios (nombre, email) VALUES ('$nombre', '$email')";
+    
+    // 5. Ejecutar la consulta y verificar si fue exitosa
+    if ($conexion->query($sql) === TRUE) {
+        echo "✅ Nuevo registro creado exitosamente.";
+    } else {
+        echo "❌ Error al insertar el registro: " . $sql . "<br>" . $conexion->error;
+    }
+}
+
+// 6. Cerrar la conexión (buena práctica)
+$conexion->close();
+?>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario de Registro</title>
+</head>
+<body>
+
+    <h2>Registrar Usuario</h2>
+    
+    <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+        
+        <label for="nombre">Nombre:</label><br>
+        <input type="text" id="nombre" name="nombre" required><br><br>
+        
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="email" required><br><br>
+        
+        <input type="submit" value="Guardar Registro">
+    </form>
+
+</body>
+</html>
+
+Resumen del Flujo
+conexion.php define las credenciales y establece la conexión a MySQL, guardándola en la variable $conexion.
+
+insertar.php primero incluye conexion.php.
+
+Cuando el usuario envía el formulario, la variable $_SERVER["REQUEST_METHOD"] es igual a "POST".
+
+El código PHP recupera los datos del formulario usando $_POST['nombre'] y $_POST['email'].
+
+Se arma la instrucción INSERT INTO de SQL.
+
+Se ejecuta la consulta usando $conexion->query($sql), guardando los datos en tu tabla de MySQL.
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Examen</title>
+</head>
+<body>
+
+    <form action ="{{route('guardabenjamin')}}" method="POST">
+    {{csrf_field()}}
+
+    <tr>
+        <td colspan="2">Autos</td>
+    </tr>
+
+    <tr>
+        <td>
+            <select name  = "Marca"> 
+            <option value  = "1"> BMW</option>
+            <option value  = "2"> Vento</option>
+            <option value  = "3"> Toyota</option>
+            </select>
+        </td>
+        <td>
+           @if($errors->first('modelo'))
+           {{$errors->first('modelo')}}
+           @endif
+           <input type = "text" name = "Modelo" value = "{{old('modelo')}}">
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            @if($errors->first('costo'))
+           {{$errors->first('costo')}}
+           @endif
+           <input type = "text" name = "Costo" max = 200  min = 100 value = "{{old('Costo')}}">
+        </td>
+        <td>
+            <input type = 'checkbox' name = 'seguridad' value = 'Uniforme'>llantas
+            <input type = 'checkbox' name = 'seguridad' value = 'Lentes'>vaso
+            <input type = 'checkbox' name = 'seguridad' value = 'Botas'>clima
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <input type = "submit" value = "Guadar" >
+        </td>
+    </tr>
+</body>
+</html>
+
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autos</title>
+    <style>
+        .error { color: red; font-size: 12px; }
+        .form-container { max-width: 800px; margin: 20px auto; padding: 20px; }
+        .main-table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            border: 2px solid #333;
+        }
+        .main-table td { 
+            padding: 12px; 
+            border: 1px solid #ddd; 
+        }
+        .section-title { 
+            background-color: #f0f0f0; 
+            font-weight: bold; 
+            text-align: center; 
+        }
+        input[type="text"], select { 
+            width: 100%; 
+            padding: 8px; 
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        input[type="submit"] {
+            padding: 12px 30px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        input[type="submit"]:hover {
+            background: #0056b3;
+        }
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+
+
+        /**<!DOCTYPE html>
+<html lang="en">
+<head>
+   <title>Examen</title>
+</head>
+<body>
+
+<form action ="{{route('guardabenjamin')}}" method="POST">
+    {{csrf_field()}}
+<br>
+<center>
+    <label for="modelo">Modelo:</label>
+    <input type="number" name="modelo" required>
+    &nbsp;&nbsp;&nbsp; <label for="costo">Costo (100-200):</label>
+    <input type="number" name="costo" required min="100" max="200">
+    <br><br>
+    
+        <table border = 1>
+            <tr>
+                <td align="center"><b>Productos</b></td>
+                <td align="center"><b>Costo</b></td>
+                <td align="center"><b>Cantidades</b></td>
+                <td width="150" align="center"><b>Total</b></td>
+            </tr>
+            <tr>
+                <td>Pelotas</td>
+                <td align="right">$100</td>
+                <td align="right">3</td>
+                <td align="right">$300</td>
+            </tr>
+            <tr>
+                <td>Cajas</td>
+                <td align="right">$50</td>
+                <td align="right">7</td>
+                <td align="right">$350</td>
+            </tr>
+            <tr>
+                <td colspan="3" align="right"><b>Total</b></td>
+                <td align="right"><i>650</i></td>
+            </tr>
+            <tr>
+               <td colspan="4">
+                  <input type = 'checkbox' name = 'seguridad' value = 'Casco'>Casco
+                  <input type = 'checkbox' name = 'seguridad' value = 'Uniforme'>Uniforme
+                  <input type = 'checkbox' name = 'seguridad' value = 'Lentes'>Lentes
+                  <input type = 'checkbox' name = 'seguridad' value = 'Botas'>Botas
+                </td>
+             </tr>
+             <tr>
+               <td colspan="4">
+                  <select name  = "idc"> 
+                  <option value  = "1"> ITI</option>
+                  <option value  = "2"> Logistica</option>
+                  <option value  = "3"> Biotecnologia</option>
+                  </select>
+               </td>
+             </tr>
+             <tr>
+                <td colspan="4" align="center">
+                <input type="submit" value="Guardar Pedido">
+                </td>
+             </tr>
+         </table>
+        </center>
+        </form>
+    </body> 
+</html>/
+
+
+<?php
+
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\josecontroller;
+
+
+// Ruta para mostrar el formulario
+Route::get('ordenventa', [josecontroller::class, 'ordenventa'])->name('ordenventa');
+
+// Ruta para procesar el formulario
+Route::post('ordencompra', [josecontroller::class, 'ordencompra'])->name('ordencompra');
