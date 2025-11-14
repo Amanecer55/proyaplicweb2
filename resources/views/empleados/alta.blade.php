@@ -9,8 +9,8 @@
                <tr>
                     <td>Clave</td>
                     <td>
-                        @if($errors->has('ide'))
-                            {{ $errors->first('ide') }}
+                        @if($errors->has('idemp'))
+                            {{ $errors->first('idemp') }}
                         @endif
                         <input type="text" name="idemp" value="{{ $idsigue }}"readonly>
                     </td>
@@ -49,10 +49,10 @@
                 <tr>
                     <td>Email</td>
                     <td>
-                        @if($errors->has('email'))
-                            {{ $errors->first('email') }}
+                        @if($errors->has('correo'))
+                            {{ $errors->first('correo') }}
                         @endif
-                        <input type="email" name="correo" value="{{ old('correo') }}" >
+                        <input type="correo" name="correo" value="{{ old('correo') }}" >
                     </td>
                 </tr>
                 <tr>
